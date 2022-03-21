@@ -9,9 +9,10 @@
 
 namespace ariel {
     class Notebook {
-    public:
-        void write(unsigned int page, unsigned int row, unsigned int col, Direction direction, std::string toWrite);
+    private:
 
+    public:
+        void write(unsigned int page, unsigned int row, unsigned int col, Direction direction, const std::string &toWrite);
 
         std::string
         read(unsigned int page, unsigned int row, unsigned int col, Direction direction, unsigned int numOfChar);

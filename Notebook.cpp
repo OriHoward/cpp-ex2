@@ -2,15 +2,14 @@
 #include "Notebook.hpp"
 #include <iostream>
 #include <stdexcept>
-#include <vector>
 #include "Direction.hpp"
-#include <string.h>
+
 
 namespace ariel {
     using std::string;
 
     void Notebook::write(unsigned int page, unsigned int row, unsigned int col, Direction direction,
-                         string toWrite) {
+                         const string &toWrite) {
         std::cout << "he";
     }
 
