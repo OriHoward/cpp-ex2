@@ -6,4 +6,5 @@ namespace ariel {
 		Horizontal,
 		Vertical	
 	};
+
 }
