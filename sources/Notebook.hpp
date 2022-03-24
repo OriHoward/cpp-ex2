@@ -23,6 +23,8 @@ namespace ariel {
 
         static bool contains(const std::string &str, const std::string &str2);
 
+        Page &getPage(int page);
+
         void
         write(int page, int row, int col, Direction direction, const std::string &toWrite);
 

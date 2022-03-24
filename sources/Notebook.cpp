@@ -12,6 +12,13 @@ namespace ariel {
     using std::string;
     using std::unordered_map;
 
+    Page &Notebook::getPage(int page) {
+        if (this->notebookMap.count(page) == 0) {
+            this->notebookMap[page] = Page();
+        }
+        return this->notebookMap[page];
+    }
+
     void Notebook::checkStrInput(const string &strToCheck) {
         if (contains(strToCheck, "\n") || contains(strToCheck, "\r") || contains(strToCheck, "~") ||
             contains(strToCheck, "\0") || contains(strToCheck, "\t")) {
@@ -30,7 +37,8 @@ namespace ariel {
                 throw std::invalid_argument("bad input");
             }
         }
-        std::vector<char> currVec = this->notebookMap[page].getRow(row);
+        Page &currPage = this->getPage(page);
+        std::vector<char> currVec = currPage.getRow(row);
         unsigned int newCol = (unsigned int) col;
         for (string::size_type i = 0; i < toWrite.size(); ++i) {
             currVec.at(newCol + i) = toWrite.at(i);
@@ -40,7 +48,7 @@ namespace ariel {
     }
 
     string Notebook::read(int page, int row, int col, Direction direction, int numOfChar) {
-        this->notebookMap.find(page);
+
         std::cout << "he";
         return "";
     }
