@@ -1,6 +1,6 @@
 #include "doctest.h"
-#include "Notebook.hpp"
-#include "Direction.hpp"
+#include "sources/Notebook.hpp"
+#include "sources/Direction.hpp"
 
 
 using namespace ariel;
@@ -9,8 +9,8 @@ Notebook notebook;
 
 
 TEST_CASE ("Bad input") {
-    // empty string
-            CHECK_THROWS(notebook.write(100, 30, 15, Direction::Horizontal, ""));
+    // string _ is not good
+            CHECK_THROWS(notebook.write(100, 30, 15, Direction::Horizontal, "_"));
     // tilda string
             CHECK_THROWS(notebook.write(50, 10, 37, Direction::Vertical, "~~~"));
             CHECK_THROWS(notebook.write(12, 10, 37, Direction::Horizontal, "~~~"));
@@ -42,15 +42,17 @@ TEST_CASE ("Bad input") {
 }
 
 TEST_CASE ("bad output") {
-    notebook.write(10,10,0,Direction::Vertical,"hello");
-    CHECK_EQ(notebook.read(10,10,0,Direction::Vertical,5),"~~~~~");
+    notebook.write(10, 10, 0, Direction::Vertical, "hello");
+            CHECK_EQ(notebook.read(10, 10, 0, Direction::Vertical, 5), "~~~~~");
 
 }
 
 TEST_CASE ("good output") {
-    notebook.write(4,40,5,Direction::Horizontal,"babi");
-            CHECK_EQ(notebook.read(4,40,5,Direction::Horizontal,4),"babi");
+    notebook.write(4, 40, 5, Direction::Horizontal, "babi");
+            CHECK_EQ(notebook.read(4, 40, 5, Direction::Horizontal, 4), "babi");
 }
+
+
 
 
 
