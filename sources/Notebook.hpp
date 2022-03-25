@@ -34,9 +34,9 @@ namespace ariel {
 
         bool isEmpty(int page);
 
-        void HandleWriteH(int page, int row, int col, const std::string &toWrite);
+        void HandleWriteH(int page, int row, unsigned int col, const std::string &toWrite);
 
-        void HandleWriteV(int page, int row, int col, const std::string &toWrite);
+        void HandleWriteV(int page, int row, unsigned int col, const std::string &toWrite);
 
         void HandleReadH(int page, int row, int col, int numOfChars, std::string &wordRead);
 

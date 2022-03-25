@@ -68,35 +68,34 @@ namespace ariel {
     void Notebook::write(int page, int row, int col, Direction direction, const string &toWrite) {
         checkNegativeInput(page, row, col);
         checkStrInput(toWrite);
+        unsigned int newCol = (unsigned int) col;
         if (direction == Direction::Horizontal) {
             checkValidLen(toWrite, col);
-            HandleWriteH(page, row, col, toWrite);
+            HandleWriteH(page, row, newCol, toWrite);
         } else {
-            HandleWriteV(page, row, col, toWrite);
+            HandleWriteV(page, row, newCol, toWrite);
         }
     }
 
-    void Notebook::HandleWriteH(int page, int row, int col, const std::string &toWrite) {
+    void Notebook::HandleWriteH(int page, int row, unsigned int col, const std::string &toWrite) {
         Page &currPage = this->getPage(page);
         std::vector<char> &currRow = currPage.getRow(row);
-        unsigned int newCol = (unsigned int) col;
-        if (!isCleanH(currRow, newCol, toWrite.size())) {
+        if (!isCleanH(currRow, col, toWrite.size())) {
             throw std::invalid_argument("Cannot overwrite other word");
         }
         for (string::size_type i = 0; i < toWrite.size(); ++i) {
-            currRow.at(newCol + i) = toWrite.at(i);
+            currRow.at(col + i) = toWrite.at(i);
         }
     }
 
-    void Notebook::HandleWriteV(int page, int row, int col, const std::string &toWrite) {
+    void Notebook::HandleWriteV(int page, int row, unsigned int col, const std::string &toWrite) {
         Page &currPage = this->getPage(page);
-        unsigned int newCol = (unsigned int) col;
-        if (!isCleanV(currPage, row, newCol, toWrite.size())) {
+        if (!isCleanV(currPage, row, col, toWrite.size())) {
             throw std::invalid_argument("Cannot overwrite other word");
         }
         for (string::size_type i = 0; i < toWrite.size(); ++i) {
             std::vector<char> &currRow = currPage.getRow(row + int(i));
-            currRow.at(newCol) = toWrite.at(i);
+            currRow.at(col) = toWrite.at(i);
         }
     }
 
