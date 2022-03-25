@@ -22,22 +22,38 @@ namespace ariel {
 
         static void checkValidLen(const std::string &toWrite, int col);
 
+        static void checkNegativeInput(int page, int row, int col);
+
         static bool contains(const std::string &str, const std::string &str2);
 
-        static bool isCleanH(std::vector<char>&,unsigned int,unsigned int);
-        static bool isCleanV(Page&,int,unsigned int,unsigned int);
+        static bool isCleanH(std::vector<char> &, unsigned int, unsigned int);
+
+        static bool isCleanV(Page &, int, unsigned int, unsigned int);
+
         Page &getPage(int page);
 
+        bool isEmpty(int page);
+
         void HandleWriteH(int page, int row, int col, const std::string &toWrite);
+
         void HandleWriteV(int page, int row, int col, const std::string &toWrite);
+
+        void HandleReadH(int page, int row, int col, int numOfChars, std::string &wordRead);
+
+        void HandleReadV(int page, int row, int col, int numOfChars, std::string &wordRead);
+
+        void HandleEraseH(int page, int row, unsigned int col, int numOfChars);
+
+        void HandleEraseV(int page, unsigned int row, int col, int numOfChars);
+
         void
         write(int page, int row, int col, Direction direction, const std::string &toWrite);
 
         std::string
-        read(int page, int row, int col, Direction direction, int numOfChar);
+        read(int page, int row, int col, Direction direction, int numOfChars);
 
         void
-        erase(int page, int row, int col, Direction direction, int numOfChar);
+        erase(int page, int row, int col, Direction direction, int numOfChars);
 
         void show(int page);
     };
