@@ -25,7 +25,7 @@ namespace ariel {
         static bool contains(const std::string &str, const std::string &str2);
 
         static bool isCleanH(std::vector<char>&,unsigned int,unsigned int);
-        static bool isCleanV();
+        static bool isCleanV(Page&,int,unsigned int,unsigned int);
         Page &getPage(int page);
 
         void HandleWriteH(int page, int row, int col, const std::string &toWrite);

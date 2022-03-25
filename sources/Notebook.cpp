@@ -32,16 +32,24 @@ namespace ariel {
         }
     }
 
-    bool Notebook::isCleanH(std::vector<char> &currVec, unsigned int col, unsigned int length) {
-        for (string::size_type i = 0; i < length; ++i) {
-            if (currVec[col + i] != '_') {
+    bool Notebook::isCleanH(std::vector<char> &currRow, unsigned int col, unsigned int wordLen) {
+        for (string::size_type i = 0; i < wordLen; ++i) {
+            if (currRow[col + i] != '_') {
                 return false;
             }
         }
         return true;
     }
 
-    bool Notebook::isCleanV() { return false; }
+    bool Notebook::isCleanV(Page &currPage, int row, unsigned int col, unsigned int wordLen) {
+        for (int i = 0; i < wordLen; ++i) {
+            std::vector<char> currRow = currPage.getRow(row + i);
+            if (currRow.at(col) != '_') {
+                return false;
+            }
+        }
+        return true;
+    }
 
     bool Notebook::contains(const string &str, const string &str2) {
         return str.find(str2) != std::string::npos;
@@ -59,17 +67,24 @@ namespace ariel {
 
     void Notebook::HandleWriteH(int page, int row, int col, const std::string &toWrite) {
         Page &currPage = this->getPage(page);
-        std::vector<char> &currVec = currPage.getRow(row);
+        std::vector<char> &currRow = currPage.getRow(row);
         unsigned int newCol = (unsigned int) col;
-        if (!isCleanH(currVec, newCol, toWrite.size())) {
-            throw std::invalid_argument("Cannot overwrite");
+        if (!isCleanH(currRow, newCol, toWrite.size())) {
+            throw std::invalid_argument("Cannot overwrite other word");
         }
         for (string::size_type i = 0; i < toWrite.size(); ++i) {
-            currVec.at(newCol + i) = toWrite.at(i);
+            currRow.at(newCol + i) = toWrite.at(i);
         }
     }
 
-    void Notebook::HandleWriteV(int page, int row, int col, const std::string &toWrite) {}
+    void Notebook::HandleWriteV(int page, int row, int col, const std::string &toWrite) {
+        Page &currPage = this->getPage(page);
+        unsigned int newCol = (unsigned int) col;
+        if (!isCleanV(currPage, row, newCol, toWrite.size())) {
+            throw std::invalid_argument("Cannot overwrite other word");
+        }
+
+    }
 
     string Notebook::read(int page, int row, int col, Direction direction, int numOfChar) {
 
