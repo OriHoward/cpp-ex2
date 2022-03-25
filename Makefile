@@ -37,4 +37,4 @@ valgrind: test
 clean:
 	rm -f $(OBJECTS) *.o test*
 	rm -f StudentTest*.cpp
-	rm output
+	rm -f output

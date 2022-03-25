@@ -9,8 +9,6 @@ Notebook notebook;
 
 
 TEST_CASE ("Bad input") {
-    // string _ is not good
-//            CHECK_THROWS(notebook.write(100, 30, 15, Direction::Horizontal, "_")); // need to check
     // tilda string
             CHECK_THROWS(notebook.write(50, 10, 37, Direction::Vertical, "~~~"));
             CHECK_THROWS(notebook.write(12, 10, 37, Direction::Horizontal, "~~~"));

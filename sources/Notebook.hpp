@@ -22,7 +22,10 @@ namespace ariel {
 
         static void checkValidLen(const std::string &toWrite, int col);
 
+        static void checkValidLen(int numOfChars, int col);
+
         static void checkNegativeInput(int page, int row, int col);
+
 
         static bool contains(const std::string &str, const std::string &str2);
 
@@ -44,7 +47,7 @@ namespace ariel {
 
         void HandleEraseH(int page, int row, unsigned int col, int numOfChars);
 
-        void HandleEraseV(int page, unsigned int row, int col, int numOfChars);
+        void HandleEraseV(int page, int row, unsigned int col, int numOfChars);
 
         void
         write(int page, int row, int col, Direction direction, const std::string &toWrite);

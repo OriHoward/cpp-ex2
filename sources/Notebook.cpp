@@ -42,6 +42,12 @@ namespace ariel {
         }
     }
 
+    void Notebook::checkValidLen(int numOfChars, int col) {
+        if (numOfChars + col > MAX_COL) {
+            throw std::invalid_argument("Exceeding row limit");
+        }
+    }
+
     bool Notebook::isCleanH(std::vector<char> &currRow, unsigned int col, unsigned int wordLen) {
         for (string::size_type i = 0; i < wordLen; ++i) {
             if (currRow[col + i] != '_') {
@@ -104,6 +110,7 @@ namespace ariel {
         if (numOfChars < 0) {
             throw std::invalid_argument("numOfChars must be positive");
         }
+        checkValidLen(numOfChars, col);
 
         string wordRead;
         if (this->isEmpty(page)) {
@@ -129,15 +136,14 @@ namespace ariel {
 
     void
     Notebook::erase(int page, int row, int col, Direction direction, int numOfChars) {
-        if (isEmpty(page)) {
+        if (isEmpty(page)) {  // NEED TO CHECK IF I SHOULD DO THAT
             return;
         }
         unsigned int newCol = (unsigned int) col;
-        unsigned int newRow = (unsigned int) row;
         if (direction == Direction::Horizontal) {
             HandleEraseH(page, row, newCol, numOfChars);
         } else {
-            HandleEraseV(page, newRow, col, numOfChars);
+            HandleEraseV(page, row, newCol, numOfChars);
         }
 
     }
@@ -146,15 +152,19 @@ namespace ariel {
         Page &currPage = this->getPage(page);
         std::vector<char> &currRow = currPage.getRow(row);
         for (string::size_type i = 0; i < numOfChars; ++i) {
-            if (currRow.at(col + i) != '~' && currRow.at(col + i) != '_') {
-                currRow.at(col + i) = '~';
-            }
+            currRow.at(col + i) = '~';
+
         }
 
     }
 
-    void Notebook::HandleEraseV(int page, unsigned int row, int col, int numOfChars) {
+    void Notebook::HandleEraseV(int page, int row, unsigned int col, int numOfChars) {
+        Page &currPage = this->getPage(page);
+        for (string::size_type i = 0; i < numOfChars; ++i) {
+            std::vector<char> &currRow = currPage.getRow(row + int(i));
+            currRow.at(col) = '~';
 
+        }
     }
 
     void Notebook::show(int page) {
