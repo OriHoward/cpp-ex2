@@ -21,10 +21,27 @@ namespace ariel {
 
     void Notebook::checkStrInput(const string &strToCheck) {
         if (contains(strToCheck, "\n") || contains(strToCheck, "\r") || contains(strToCheck, "~") ||
-            contains(strToCheck, "\0") || contains(strToCheck, "\t")) {
+            contains(strToCheck, "\t")) {
             throw std::invalid_argument("bad input");
         }
     }
+
+    void Notebook::checkValidLen(const string &toWrite, int col) {
+        if (int(toWrite.size()) + col > MAX_COL) {
+            throw std::invalid_argument("String is exceeding row limit");
+        }
+    }
+
+    bool Notebook::isCleanH(std::vector<char> &currVec, unsigned int col, unsigned int length) {
+        for (string::size_type i = 0; i < length; ++i) {
+            if (currVec[col + i] != '_') {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    bool Notebook::isCleanV() { return false; }
 
     bool Notebook::contains(const string &str, const string &str2) {
         return str.find(str2) != std::string::npos;
@@ -33,35 +50,40 @@ namespace ariel {
     void Notebook::write(int page, int row, int col, Direction direction, const string &toWrite) {
         checkStrInput(toWrite);
         if (direction == Direction::Horizontal) {
-            if (int(toWrite.size()) + col > MAX_COL) {
-                throw std::invalid_argument("bad input");
-            }
+            checkValidLen(toWrite, col);
+            HandleWriteH(page, row, col, toWrite);
+        } else {
+            HandleWriteV(page, row, col, toWrite);
         }
+    }
+
+    void Notebook::HandleWriteH(int page, int row, int col, const std::string &toWrite) {
         Page &currPage = this->getPage(page);
-        std::vector<char> currVec = currPage.getRow(row);
+        std::vector<char> &currVec = currPage.getRow(row);
         unsigned int newCol = (unsigned int) col;
+        if (!isCleanH(currVec, newCol, toWrite.size())) {
+            throw std::invalid_argument("Cannot overwrite");
+        }
         for (string::size_type i = 0; i < toWrite.size(); ++i) {
             currVec.at(newCol + i) = toWrite.at(i);
         }
-
-        std::cout << "he";
     }
+
+    void Notebook::HandleWriteV(int page, int row, int col, const std::string &toWrite) {}
 
     string Notebook::read(int page, int row, int col, Direction direction, int numOfChar) {
 
-        std::cout << "he";
         return "";
     }
 
     void
     Notebook::erase(int page, int row, int col, Direction direction, int numOfChar) {
         this->notebookMap.find(page);
-        std::cout << "he";
     }
 
     void Notebook::show(int page) {
-        this->notebookMap.find(page);
-        std::cout << "he";
+        std::vector<char> toShow = this->notebookMap.at(page).getRow(0);
+        std::cout << toShow.at(0) << toShow.at(1) << toShow.at(2) << std::endl;
     }
 }
 
