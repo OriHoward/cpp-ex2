@@ -19,7 +19,7 @@ namespace ariel {
         return this->notebookMap[page];
     }
 
-    bool Notebook::isEmpty(int page) {
+    bool Notebook::isNotEmpty(int page) {
         return bool(this->notebookMap.count(page));
     }
 
@@ -90,9 +90,8 @@ namespace ariel {
             throw std::invalid_argument("Cannot overwrite other word");
         }
         for (string::size_type i = 0; i < toWrite.size(); ++i) {
-            if (isspace(toWrite.at(i)) == 0) {
-                currRow.at(col + i) = toWrite.at(i);
-            }
+            currRow.at(col + i) = toWrite.at(i);
+
         }
     }
 
@@ -103,9 +102,8 @@ namespace ariel {
         }
         for (string::size_type i = 0; i < toWrite.size(); ++i) {
             std::vector<char> &currRow = currPage.getRow(row + int(i));
-            if (isspace(toWrite.at(i)) == 0) {
-                currRow.at(col) = toWrite.at(i);
-            }
+            currRow.at(col) = toWrite.at(i);
+
         }
     }
 
@@ -114,28 +112,40 @@ namespace ariel {
         if (numOfChars < 0) {
             throw std::invalid_argument("numOfChars must be positive");
         }
-        checkValidLen(numOfChars, col);
-
-        string wordRead;
-        if (this->isEmpty(page)) {
-            throw std::invalid_argument("Page is empty");
+        if (!this->isNotEmpty(page)) {
+            return "";
         }
+        checkValidLen(numOfChars, col);
+        string wordRead;
+        unsigned int newCol = (unsigned int) col;
         if (direction == Direction::Horizontal) {
-            HandleReadH(page, row, col, numOfChars, wordRead);
+            HandleReadH(page, row, newCol, numOfChars, wordRead);
         } else {
-            HandleReadV(page, row, col, numOfChars, wordRead);
+            HandleReadV(page, row, newCol, numOfChars, wordRead);
         }
         return wordRead;
     }
 
-    void Notebook::HandleReadH(int page, int row, int col, int numOfChars, string &wordRead) {
-//        Page &currPage = this->getPage(page);
-//        std::vector<char> currRow = currPage.getRow(row);
-//        if (this->notebookMap[page].)
+    void Notebook::HandleReadH(int page, int row, unsigned int col, int numOfChars, string &wordRead) {
+        Page &currPage = this->getPage(page);
+        std::vector<char> &currRow = currPage.getRow(row);
+        for (string::size_type i = 0; i < numOfChars; ++i) {
+            char charRead = currRow.at(col + i);
+            if (charRead != '_' && charRead != '~') {
+                wordRead += charRead;
+            }
+        }
     }
 
-    void Notebook::HandleReadV(int page, int row, int col, int numOfChars, string &wordRead) {
-
+    void Notebook::HandleReadV(int page, int row, unsigned int col, int numOfChars, string &wordRead) {
+        Page &currPage = this->getPage(page);
+        for (string::size_type i = 0; i < numOfChars; ++i) {
+            std::vector<char> &currRow = currPage.getRow(i);
+            char charRead = currRow.at(col);
+            if (charRead != '_' && charRead != '~') {
+                wordRead += charRead;
+            }
+        }
     }
 
     void
