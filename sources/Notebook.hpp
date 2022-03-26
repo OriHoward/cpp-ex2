@@ -23,9 +23,9 @@ namespace ariel {
 
         static void checkValidLen(const std::string &toWrite, int col);
 
-        static void checkValidLen(int numOfChars, int col);
+        static void checkValidLen(int, int);
 
-        static void checkNegativeInput(int page, int row, int col);
+        static void checkInput(int page, int row, int col);
 
 
         static bool contains(const std::string &str, const std::string &str2);

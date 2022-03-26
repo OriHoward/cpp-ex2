@@ -30,9 +30,9 @@ namespace ariel {
         }
     }
 
-    void Notebook::checkNegativeInput(int page, int row, int col) {
-        if (page < 0 || col < 0 || row < 0) {
-            throw std::invalid_argument("bad input - page row and col must be positive");
+    void Notebook::checkInput(int page, int row, int col) {
+        if (page < 0 || col < 0 || row < 0 || col > MAX_COL) {
+            throw std::invalid_argument("bad input - page and row must be positive and col between 0 to 100");
         }
     }
 
@@ -42,11 +42,12 @@ namespace ariel {
         }
     }
 
-    void Notebook::checkValidLen(int numOfChars, int col) {
+    void Notebook::checkValidLen(int col, int numOfChars) {
         if (numOfChars + col > MAX_COL) {
-            throw std::invalid_argument("Exceeding row limit");
+            throw std::invalid_argument("exceeding row limit");
         }
     }
+
 
     bool Notebook::isCleanH(std::vector<char> &currRow, unsigned int col, unsigned int wordLen) {
         for (string::size_type i = 0; i < wordLen; ++i) {
@@ -72,14 +73,13 @@ namespace ariel {
     }
 
     void Notebook::write(int page, int row, int col, Direction direction, const string &toWrite) {
-        checkNegativeInput(page, row, col);
+        checkInput(page, row, col);
         checkStrInput(toWrite);
-        unsigned int newCol = (unsigned int) col;
         if (direction == Direction::Horizontal) {
             checkValidLen(toWrite, col);
-            HandleWriteH(page, row, newCol, toWrite);
+            HandleWriteH(page, row, (unsigned int) col, toWrite);
         } else {
-            HandleWriteV(page, row, newCol, toWrite);
+            HandleWriteV(page, row, (unsigned int) col, toWrite);
         }
     }
 
@@ -108,20 +108,20 @@ namespace ariel {
     }
 
     string Notebook::read(int page, int row, int col, Direction direction, int numOfChars) {
-        checkNegativeInput(page, row, col);
+        checkInput(page, row, col);
         if (numOfChars < 0) {
             throw std::invalid_argument("numOfChars must be positive");
         }
-        if (!this->isNotEmpty(page)) {
-            return "";
-        }
-        checkValidLen(numOfChars, col);
+//        if (!this->isNotEmpty(page)) {
+//            return "";
+//        }
+
         string wordRead;
-        unsigned int newCol = (unsigned int) col;
         if (direction == Direction::Horizontal) {
-            HandleReadH(page, row, newCol, numOfChars, wordRead);
+            checkValidLen(col, numOfChars);
+            HandleReadH(page, row, (unsigned int) col, numOfChars, wordRead);
         } else {
-            HandleReadV(page, row, newCol, numOfChars, wordRead);
+            HandleReadV(page, row, (unsigned int) col, numOfChars, wordRead);
         }
         return wordRead;
     }
@@ -150,6 +150,7 @@ namespace ariel {
 
     void
     Notebook::erase(int page, int row, int col, Direction direction, int numOfChars) {
+        checkInput(page, row, col);
         unsigned int newCol = (unsigned int) col;
         if (direction == Direction::Horizontal) {
             HandleEraseH(page, row, newCol, numOfChars);
