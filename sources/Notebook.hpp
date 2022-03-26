@@ -27,8 +27,7 @@ namespace ariel {
 
         static void checkInput(int page, int row, int col);
 
-
-        static bool contains(const std::string &str, const std::string &str2);
+        static void checkNegativeLen(int len);
 
         static bool isCleanH(std::vector<char> &, unsigned int, unsigned int);
 

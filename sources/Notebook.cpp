@@ -24,9 +24,16 @@ namespace ariel {
     }
 
     void Notebook::checkStrInput(const string &strToCheck) {
-        if (contains(strToCheck, "\n") || contains(strToCheck, "\r") || contains(strToCheck, "~") ||
-            contains(strToCheck, "\t")) {
-            throw std::invalid_argument("bad input");
+        for (string::size_type i = 0; i < strToCheck.size(); ++i) {
+            if (isprint(strToCheck.at(i)) == 0 || strToCheck.at(i) == '~') {
+                throw std::invalid_argument("bad input");
+            }
+        }
+    }
+
+    void Notebook::checkNegativeLen(int len) {
+        if (len < 0) {
+            throw std::invalid_argument("len must be positive");
         }
     }
 
@@ -68,9 +75,6 @@ namespace ariel {
         return true;
     }
 
-    bool Notebook::contains(const string &str, const string &str2) {
-        return str.find(str2) != std::string::npos;
-    }
 
     void Notebook::write(int page, int row, int col, Direction direction, const string &toWrite) {
         checkInput(page, row, col);
@@ -109,9 +113,7 @@ namespace ariel {
 
     string Notebook::read(int page, int row, int col, Direction direction, int numOfChars) {
         checkInput(page, row, col);
-        if (numOfChars < 0) {
-            throw std::invalid_argument("numOfChars must be positive");
-        }
+        checkNegativeLen(numOfChars);
 //        if (!this->isNotEmpty(page)) {
 //            return "";
 //        }
@@ -131,9 +133,7 @@ namespace ariel {
         std::vector<char> &currRow = currPage.getRow(row);
         for (string::size_type i = 0; i < numOfChars; ++i) {
             char charRead = currRow.at(col + i);
-            if (charRead != '_' && charRead != '~') {
-                wordRead += charRead;
-            }
+            wordRead += charRead;
         }
     }
 
@@ -142,15 +142,14 @@ namespace ariel {
         for (string::size_type i = 0; i < numOfChars; ++i) {
             std::vector<char> &currRow = currPage.getRow(i);
             char charRead = currRow.at(col);
-            if (charRead != '_' && charRead != '~') {
-                wordRead += charRead;
-            }
+            wordRead += charRead;
         }
     }
 
     void
     Notebook::erase(int page, int row, int col, Direction direction, int numOfChars) {
         checkInput(page, row, col);
+        checkNegativeLen(numOfChars);
         unsigned int newCol = (unsigned int) col;
         if (direction == Direction::Horizontal) {
             HandleEraseH(page, row, newCol, numOfChars);
@@ -172,11 +171,20 @@ namespace ariel {
         Page &currPage = this->getPage(page);
         for (string::size_type i = 0; i < numOfChars; ++i) {
             std::vector<char> &currRow = currPage.getRow(row + int(i));
+//            if (currRow.at(col) != '~') {
+//                throw std::invalid_argument("Cannot delete what has been deleted");
+//            }
             currRow.at(col) = '~';
         }
     }
 
     void Notebook::show(int page) {
+        if (page < 0) {
+            throw std::invalid_argument("Page must be positive!");
+        }
+        if (!this->isNotEmpty(page)) {
+            return;
+        }
         int numOfRowsToShow = 0;
         std::cout << "Enter the number of rows you would like to see: " << std::endl;
         std::cin >> numOfRowsToShow;

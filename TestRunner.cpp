@@ -2,7 +2,6 @@
 #include "doctest.h"
 using namespace doctest;
 
-
 const int MIN_TESTS = 20;
 
 
@@ -14,7 +13,7 @@ struct ReporterGrader: public ConsoleReporter {
         ConsoleReporter::test_run_end(run_stats);
         int numAsserts = run_stats.numAsserts >=  MIN_TESTS? run_stats.numAsserts:  MIN_TESTS;
         float grade = (run_stats.numAsserts - run_stats.numAssertsFailed) * 100 / numAsserts;
-//         std::cout << "Grade: " << grade << std::endl;
+        // std::cout << "Grade: " << grade << std::endl;
     }
 };
 
