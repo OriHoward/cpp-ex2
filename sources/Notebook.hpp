@@ -11,6 +11,7 @@
 #define CPP_EX2_NOTEBOOK_HPP
 
 #define MAX_COL 100
+
 using std::unordered_map;
 
 namespace ariel {

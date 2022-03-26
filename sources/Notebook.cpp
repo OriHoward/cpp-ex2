@@ -90,7 +90,9 @@ namespace ariel {
             throw std::invalid_argument("Cannot overwrite other word");
         }
         for (string::size_type i = 0; i < toWrite.size(); ++i) {
-            currRow.at(col + i) = toWrite.at(i);
+            if (isspace(toWrite.at(i)) == 0) {
+                currRow.at(col + i) = toWrite.at(i);
+            }
         }
     }
 
@@ -101,7 +103,9 @@ namespace ariel {
         }
         for (string::size_type i = 0; i < toWrite.size(); ++i) {
             std::vector<char> &currRow = currPage.getRow(row + int(i));
-            currRow.at(col) = toWrite.at(i);
+            if (isspace(toWrite.at(i)) == 0) {
+                currRow.at(col) = toWrite.at(i);
+            }
         }
     }
 
@@ -136,11 +140,6 @@ namespace ariel {
 
     void
     Notebook::erase(int page, int row, int col, Direction direction, int numOfChars) {
-//        if (isEmpty(page)) {  // NEED TO CHECK IF I SHOULD DO THAT
-//            std::cout << "asd";
-//            return;
-//        }
-//        std::cout << "asad";
         unsigned int newCol = (unsigned int) col;
         if (direction == Direction::Horizontal) {
             HandleEraseH(page, row, newCol, numOfChars);
@@ -170,7 +169,7 @@ namespace ariel {
         int numOfRowsToShow = 0;
         std::cout << "Enter the number of rows you would like to see: " << std::endl;
         std::cin >> numOfRowsToShow;
-        for (int i = 0; i < numOfRowsToShow; ++i) {
+        for (int i = 0; i <= numOfRowsToShow; ++i) {
             std::vector<char> &currRow = this->notebookMap.at(page).getRow(i);
             if (!this->isCleanH(currRow, 0, MAX_COL)) {
                 std::cout << i << ": ";
