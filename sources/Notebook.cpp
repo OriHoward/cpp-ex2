@@ -114,10 +114,6 @@ namespace ariel {
     string Notebook::read(int page, int row, int col, Direction direction, int numOfChars) {
         checkInput(page, row, col);
         checkNegativeLen(numOfChars);
-//        if (!this->isNotEmpty(page)) {
-//            return "";
-//        }
-
         string wordRead;
         if (direction == Direction::Horizontal) {
             checkValidLen(col, numOfChars);
@@ -171,9 +167,6 @@ namespace ariel {
         Page &currPage = this->getPage(page);
         for (string::size_type i = 0; i < numOfChars; ++i) {
             std::vector<char> &currRow = currPage.getRow(row + int(i));
-//            if (currRow.at(col) != '~') {
-//                throw std::invalid_argument("Cannot delete what has been deleted");
-//            }
             currRow.at(col) = '~';
         }
     }
